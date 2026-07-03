@@ -1,6 +1,26 @@
 version: '3.8'
 
 services:
+  fastapi:
+    build: 
+      context: .
+      dockerfile: ./docker/Dockerfile
+    container_name: fastapi_app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./services/api:/services/api
+    depends_on:
+      - postgres
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:8000/health"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    networks:
+      - notification_network
   postgres:
     image: postgres:15
     container_name: postgres_db
