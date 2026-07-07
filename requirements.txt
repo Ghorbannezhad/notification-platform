@@ -1,1 +1,4 @@
+alembic
 fastapi[standard]
+psycopg2-binary
+sqlmodel
